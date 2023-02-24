@@ -1,0 +1,110 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+:Nitrite Analyzer Admin: as admin
+
+(Run Command Line Tool) as start
+(Display End Message) as end
+
+
+usecase export as "
+Export Nitrite Database Content
+==
+This allows the exporting of database
+content as JSON using the Nitrite
+API's
+"
+usecase import as "
+Import Nitrite Database Content
+==
+This allows importing of JSON content
+to a database file using the Nitrite
+API's
+"
+(Recover Nitrite Database File) as recover
+(List Collections in Database File) as listCollections
+(List Documents in Collection in Database File) as listDocuments
+(Supply Filter Options) as filter
+(Save Results To File) as save
+(Sort) as sort
+(Page in Results) as page
+
+admin --> start
+
+start --> export
+start --> listDocuments
+start --> import
+start --> recover
+start --> listCollections
+
+export ..> filter : <<Optional>>
+listDocuments ..> filter : <<Optional>>
+listDocuments ..> sort : <<Optional>>
+listDocuments ..> save : <<Optional>>
+listDocuments ..> page : <<Optional>>
+listCollections ..> page : <<Optional>>
+
+
+
+note right of filter
+The filter options
+-F property>value
+-F property>=value
+-F property<value
+-F property<=value
+-F property=value
+Multiple entries will be accepted
+with logical AND
+end note
+
+note right of sort
+This sorts the listed entries
+The option will be passed as
+-S property=ASCENDING
+-S property=DESCENDING
+Only one option is accepted
+end note
+
+note right of save
+Saving to file will require the
+input flag
+-out <<relative_filepath>>
+end note
+
+note right of page
+This will display the results
+on the console and the user
+can go page right i.e. page +1
+or go page left i.e. page -1
+also -L <<limit>>
+will be available to limit number of entries
+per page
+end note
+
+(Less Than) as LT
+(Greater Than) as GT
+(Less Than Or Equal) as LE
+(Greater Than Or Equal) as GE
+(Equal) as EQ
+
+(ASCENDING) as ASC
+(DESCENDING) as DESC
+
+filter --> LT
+filter --> LE
+filter --> GT
+filter --> GE
+filter --> EQ
+
+sort --> ASC
+sort --> DESC
+
+export ---> end
+listDocuments ---> end
+import ---> end
+recover ---> end
+listCollections ---> end
+
+
+
+@enduml

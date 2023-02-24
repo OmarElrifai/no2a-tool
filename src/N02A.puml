@@ -1,0 +1,84 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+
+package com.vbs.no2a.filter {
+
+interface Command {
+  void apply()
+  void cancel()
+}
+
+abstract class NO2Filter implements Command {
+  String property
+  Object value
+  ObjectFilter filter
+
+  setProperty(String property)
+  getProperty()
+  setValue(Object value)
+  getValue()
+  ObjectFilter getFilterObject()
+}
+
+note left of NO2Filter
+The class should apply a filter of whatever type
+Equal/Greater/GreaterOrEqual/Less/LessOrEqual
+The filter should store the object in the filter object
+Any external client (CODE/Class) can extract the nitrite
+filter object via the getFilterObject() method
+Cancel should clear the filter object and properties
+end note
+
+class EqualFilter {}
+class GreaterFilter {}
+class GreaterOrEqualFilter {}
+class LessFilter {}
+class LessOrEqualFilter{}
+
+class FilterFactory {
+  NO2Filter createFilter(String argument)
+}
+
+note bottom of FilterFactory
+This class is responsible for the following
+* Creating the proper filter class based on the input from the user CLI *
+The following procedures should be followed (Consider optimization if possible):
+1- Extract the operation -- Which determines the class to be created
+2- Extract the property on the right of the operation
+3- Extract the value on the left of the operation
+
+May throw error, if unable to determine the input to create object.
+
+end note
+
+
+
+NO2Filter <|-- EqualFilter
+NO2Filter <|-- GreaterFilter
+NO2Filter <|-- GreaterOrEqualFilter
+NO2Filter <|-- LessFilter
+NO2Filter <|-- LessOrEqualFilter
+
+EqualFilter <-- FilterFactory
+GreaterFilter <-- FilterFactory
+GreaterOrEqualFilter <-- FilterFactory
+LessFilter <-- FilterFactory
+LessOrEqualFilter <-- FilterFactory
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+@enduml
